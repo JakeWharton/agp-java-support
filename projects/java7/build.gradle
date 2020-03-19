@@ -1,0 +1,16 @@
+buildscript {
+  apply from: file('../common_buildscript.groovy'), to: buildscript
+}
+
+apply from: file('../common_project.groovy')
+
+android {
+  defaultConfig {
+    applicationId 'com.jakewharton.javaversions.java7'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+}

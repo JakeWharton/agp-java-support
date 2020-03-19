@@ -1,0 +1,16 @@
+buildscript {
+  apply from: file('../common_buildscript.groovy'), to: buildscript
+}
+
+apply from: file('../common_project.groovy')
+
+android {
+  defaultConfig {
+    applicationId 'com.jakewharton.javaversions.java12'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_12
+    targetCompatibility JavaVersion.VERSION_12
+  }
+}

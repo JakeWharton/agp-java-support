@@ -1,0 +1,11 @@
+# Gradle
+build
+.gradle
+/reports
+
+# IntelliJ
+.idea
+
+# AGP
+projects/java*/gradle*
+local.properties

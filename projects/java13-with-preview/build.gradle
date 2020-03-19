@@ -1,0 +1,20 @@
+buildscript {
+  apply from: file('../common_buildscript.groovy'), to: buildscript
+}
+
+apply from: file('../common_project.groovy')
+
+android {
+  defaultConfig {
+    applicationId 'com.jakewharton.javaversions.java13'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_13
+    targetCompatibility JavaVersion.VERSION_13
+  }
+}
+
+tasks.withType(JavaCompile).configureEach { task ->
+  task.options.compilerArgs += "--enable-preview"
+}
