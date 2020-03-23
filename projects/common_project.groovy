@@ -20,4 +20,21 @@ android {
   lintOptions {
     checkReleaseBuilds false
   }
+
+  productFlavors {
+    flavorDimensions 'type'
+
+    javaOnly {
+      dimension 'type'
+    }
+    javaWithAndroid {
+      dimension 'type'
+    }
+  }
+
+  sourceSets {
+    javaWithAndroid {
+      java.srcDirs += ['../androidSrc']
+    }
+  }
 }

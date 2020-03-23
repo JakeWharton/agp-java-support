@@ -23,13 +23,13 @@ class AgpTest(private val agpVersion: AgpVersion) {
 
   @Test fun java7() {
     gradleRunner("java7") {
-      run("clean", "assembleRelease")
+      run("clean", "assembleJavaOnlyRelease", "assembleJavaWithAndroidRelease")
     }
   }
 
   @Test fun java8() {
     gradleRunner("java8") {
-      run("clean", "assembleRelease")
+      run("clean", "assembleJavaOnlyRelease", "assembleJavaWithAndroidRelease")
     }
   }
 
@@ -37,7 +37,11 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 9)
 
     gradleRunner("java9") {
-      run("clean", "assembleRelease")
+      run("clean", "assembleJavaOnlyRelease")
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
+      }
     }
   }
 
@@ -45,7 +49,11 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 10)
 
     gradleRunner("java10") {
-      run("clean", "assembleRelease")
+      run("clean", "assembleJavaOnlyRelease")
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
+      }
     }
   }
 
@@ -53,7 +61,11 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 11)
 
     gradleRunner("java11") {
-      run("clean", "assembleRelease")
+      run("clean", "assembleJavaOnlyRelease")
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
+      }
     }
   }
 
@@ -61,13 +73,17 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 12)
 
     gradleRunner("java12") {
-      run("clean", "compileReleaseJavaWithJavac")
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
       if (agpVersion < AGP_3_6) {
-        run("assembleRelease")
+        run("assembleJavaOnlyRelease")
       } else {
-        runAndFail("assembleRelease") {
+        runAndFail("assembleJavaOnlyRelease") {
           contains("Unsupported class file version: 56")
         }
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
@@ -76,13 +92,17 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() == 12)
 
     gradleRunner("java12-with-preview") {
-      run("clean", "compileReleaseJavaWithJavac")
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
       if (agpVersion < AGP_3_6) {
-        run("assembleRelease")
+        run("assembleJavaOnlyRelease")
       } else {
-        runAndFail("assembleRelease") {
+        runAndFail("assembleJavaOnlyRelease") {
           contains("Unsupported class file version: 56")
         }
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
@@ -91,17 +111,21 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 13)
 
     gradleRunner("java13") {
-      run("clean", "compileReleaseJavaWithJavac")
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
       if (agpVersion == AGP_3_5) {
-        run("assembleRelease")
+        run("assembleJavaOnlyRelease")
       } else {
-        runAndFail("assembleRelease") {
+        runAndFail("assembleJavaOnlyRelease") {
           if (agpVersion == AGP_3_4) {
             contains("Unsupported class file major version 57")
           } else {
             contains("Unsupported class file version: 57")
           }
         }
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
@@ -110,17 +134,21 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() == 13)
 
     gradleRunner("java13-with-preview") {
-      run("clean", "compileReleaseJavaWithJavac")
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
       if (agpVersion == AGP_3_5) {
-        run("assembleRelease")
+        run("assembleJavaOnlyRelease")
       } else {
-        runAndFail("assembleRelease") {
+        runAndFail("assembleJavaOnlyRelease") {
           if (agpVersion == AGP_3_4) {
             contains("Unsupported class file major version 57")
           } else {
             contains("Unsupported class file version: 57")
           }
         }
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
@@ -129,9 +157,13 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() >= 14)
 
     gradleRunner("java14") {
-      run("clean", "compileReleaseJavaWithJavac")
-      runAndFail("assembleRelease") {
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
+      runAndFail("assembleJavaOnlyRelease") {
         contains("Unsupported class file major version 58")
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
@@ -140,9 +172,13 @@ class AgpTest(private val agpVersion: AgpVersion) {
     assumeTrue(javaVersion() == 14)
 
     gradleRunner("java14-with-preview") {
-      run("clean", "compileReleaseJavaWithJavac")
-      runAndFail("assembleRelease") {
+      run("clean", "compileJavaOnlyReleaseJavaWithJavac")
+      runAndFail("assembleJavaOnlyRelease") {
         contains("Unsupported class file major version 58")
+      }
+
+      runAndFail("assembleJavaWithAndroidRelease") {
+        contains("DummyActivity.java:3: error: package android.app does not exist")
       }
     }
   }
